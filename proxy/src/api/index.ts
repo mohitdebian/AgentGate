@@ -265,7 +265,7 @@ export default async function routes(fastify: FastifyInstance) {
     const isShadowMode = process.env.AG_SHADOW_MODE === 'true';
     let checkpointId: string | undefined;
 
-    if (verdict === 'allow_with_checkpoint') {
+    if (verdict === 'allow_with_checkpoint' && !isShadowMode) {
       try {
         const chk = await createCheckpoint({
           decisionId: id,
