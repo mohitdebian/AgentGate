@@ -7,16 +7,19 @@ on:
     branches: [ main ]
 
 jobs:
-  lint-test:
+  lint-test-build:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: 9
+          run_install: false
       - name: Setup Node
         uses: actions/setup-node@v4
         with:
           node-version: '22'
-      - name: Install pnpm
-        run: npm i -g pnpm
       - name: Setup uv
         uses: astral-sh/setup-uv@v5
         with:
@@ -26,6 +29,8 @@ jobs:
         run: make setup
       - name: Lint
         run: make lint
+      - name: Build
+        run: make build
       - name: Test
         run: make test
   
@@ -33,5 +38,5 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - name: Build and verify compose
-        run: docker compose --profile stub config
+      - name: Validate compose configuration
+        run: docker compose config

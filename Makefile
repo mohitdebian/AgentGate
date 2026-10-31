@@ -1,4 +1,4 @@
-.PHONY: setup dev test lint up down verify demo benchmark
+.PHONY: setup dev test lint build up down verify demo benchmark
 
 setup:
 	@echo "Setting up AgentGate..."
@@ -21,6 +21,11 @@ lint:
 	cd dashboard && npx --yes pnpm lint
 	cd decision && uv run --extra dev ruff check .
 
+build:
+	@echo "Building packages..."
+	cd proxy && npx --yes pnpm build
+	cd dashboard && npx --yes pnpm build
+
 verify:
 	@echo "Running automated security verification suite..."
 	node test_scripts/verify_attacks.js
@@ -34,7 +39,7 @@ benchmark:
 	node test_scripts/load_test.js
 
 up:
-	docker compose --profile stub up --build -d
+	docker compose up --build -d
 
 down:
 	docker compose down
