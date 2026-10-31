@@ -624,7 +624,7 @@ tools:
       </div>
 
       {/* 2. Main Content Canvas */}
-      <div className="flex-1 overflow-y-auto p-[28px_32px_80px]">
+      <div className="flex-1 overflow-y-auto p-[16px_14px_60px] sm:p-[28px_32px_80px]">
         <div className="max-w-[880px] mx-auto">
           {currentSection.content}
         </div>

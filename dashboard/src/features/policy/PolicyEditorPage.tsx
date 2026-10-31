@@ -270,8 +270,30 @@ function evaluateClientPolicy(policyObj: any, tool: string, heads: any): { verdi
   return { verdict: defaultAction, reason: 'default_gate' };
 }
 
+const DEFAULT_POLICY_YAML = `version: 1
+defaults:
+  on_model_error: ask
+  abstain:
+    heads: [untrusted_influence, goal_alignment]
+    max_prob_below: 0.55
+tools:
+  send_email:
+    rules:
+      - id: deny-injected-exfil
+        when:
+          all:
+            - { head: untrusted_influence, option: likely, gt: 0.30 }
+            - { head: external_send, option: "yes", gt: 0.50 }
+        action: deny
+  issue_refund:
+    rules:
+      - id: ask-large-refund
+        action: ask
+  "*":
+    default: ask`;
+
 export function PolicyEditorPage() {
-  const [yamlText, setYamlText] = useState('');
+  const [yamlText, setYamlText] = useState(DEFAULT_POLICY_YAML);
   const [loading, setLoading] = useState(false);
   const [validating, setValidating] = useState(false);
   const [validationSuccess, setValidationSuccess] = useState<string | null>(null);
@@ -303,7 +325,9 @@ export function PolicyEditorPage() {
           }
         }
       })
-      .catch(e => setError(e.message));
+      .catch(() => {
+        // Keep fallback policy when backend is unreachable
+      });
   }, []);
 
   const handleValidate = () => {

@@ -63,25 +63,32 @@ function TopBar() {
   const policyVersion = policy?.version ? `v${policy.version}` : 'v1';
 
   return (
-    <header className="h-[44px] border-b border-ln bg-pn flex items-center px-[20px] justify-between shrink-0">
-      {/* Left: breadcrumb */}
-      <div className="flex items-center gap-[6px] text-[13px] text-t3">
-        <span>{gatewayName}</span>
-        <span>/</span>
-        <span className="text-tx font-medium">{getPageTitle()}</span>
+    <header className="h-[44px] border-b border-ln bg-pn flex items-center px-[12px] sm:px-[20px] justify-between shrink-0 gap-[8px]">
+      {/* Left: breadcrumb (desktop) / brand + title (mobile) */}
+      <div className="flex items-center gap-[6px] text-[13px] text-t3 min-w-0 overflow-hidden">
+        <div className="md:hidden flex items-center gap-[7px] mr-[2px] shrink-0">
+          <span className="lg">
+            <i />
+          </span>
+          <span className="font-semibold text-tx">AgentGate</span>
+          <span className="text-t3">/</span>
+        </div>
+        <span className="hidden md:inline truncate">{gatewayName}</span>
+        <span className="hidden md:inline">/</span>
+        <span className="text-tx font-medium truncate">{getPageTitle()}</span>
         {location.pathname.startsWith('/decisions/') && (
           <>
             <span>/</span>
-            <span className="text-tx font-medium font-mono text-[12px]">{location.pathname.split('/').pop()}</span>
+            <span className="text-tx font-medium font-mono text-[12px] truncate">{location.pathname.split('/').pop()}</span>
           </>
         )}
       </div>
 
       {/* Right: sample tag, engine tag, policy tag, theme button */}
-      <div className="flex items-center gap-[8px]">
-        <span className="tg smp">Sample data</span>
-        <span className="tg">engine <b className="mo">{engineName}</b></span>
-        <span className="tg">policy <b className="mo">{policyVersion}</b></span>
+      <div className="flex items-center gap-[6px] sm:gap-[8px] shrink-0">
+        <span className="tg smp hidden lg:inline-flex">Sample data</span>
+        <span className="tg hidden md:inline-flex">engine <b className="mo">{engineName}</b></span>
+        <span className="tg hidden sm:inline-flex">policy <b className="mo">{policyVersion}</b></span>
         <ThemeToggle />
       </div>
     </header>
@@ -101,7 +108,7 @@ function Sidebar() {
   ];
 
   return (
-    <aside className="w-[224px] border-r border-ln bg-pn flex flex-col p-[10px_8px] shrink-0 justify-between h-full select-none">
+    <aside className="hidden md:flex w-[224px] border-r border-ln bg-pn flex-col p-[10px_8px] shrink-0 justify-between h-full select-none">
       <div className="flex flex-col">
         {/* Brand mark: 20px rounded square with 1.5px accent outline and 7px accent dot */}
         <div className="flex items-center gap-[9px] p-[6px_8px] font-semibold text-tx">
@@ -169,6 +176,59 @@ function Sidebar() {
   );
 }
 
+function BottomNav() {
+  const location = useLocation();
+  const { data: pendingCount = 0 } = usePendingApprovalsCount();
+
+  const navItems = [
+    { to: '/', label: 'Audit log', icon: Activity },
+    { to: '/approvals', label: 'Approvals', icon: CheckSquare, badge: pendingCount },
+    { to: '/policy', label: 'Policy', icon: Shield },
+    { to: '/docs', label: 'Docs', icon: BookOpen },
+  ];
+
+  return (
+    <nav 
+      aria-label="Mobile navigation" 
+      className="md:hidden h-[50px] border-t border-ln bg-pn flex items-center justify-around shrink-0 select-none z-20"
+    >
+      {navItems.map(item => {
+        const Icon = item.icon;
+        const active = location.pathname === item.to || 
+          (item.to === '/' && location.pathname === '/audit') ||
+          (item.to !== '/' && location.pathname.startsWith(item.to));
+        return (
+          <Link 
+            key={item.to} 
+            to={item.to} 
+            className={`flex-1 h-full flex flex-col items-center justify-center gap-[3px] text-[11px] relative transition-colors ${
+              active ? 'text-tx font-medium' : 'text-t2 hover:text-tx'
+            }`}
+          >
+            <span className="relative">
+              <Icon 
+                size={16} 
+                strokeWidth={1.8} 
+                aria-hidden="true" 
+                className={active ? 'text-at' : 'text-current'} 
+              />
+              {item.badge !== undefined && item.badge > 0 && (
+                <span className="absolute -top-[4px] -right-[8px] bg-ac text-white text-[9.5px] font-semibold rounded-full min-w-[14px] h-[14px] flex items-center justify-center px-[3px]">
+                  {item.badge}
+                </span>
+              )}
+            </span>
+            <span className="truncate">{item.label}</span>
+            {active && (
+              <span className="absolute bottom-0 left-[20%] right-[20%] h-[2px] bg-at rounded-t-full" />
+            )}
+          </Link>
+        );
+      })}
+    </nav>
+  );
+}
+
 export function App() {
   return (
     <QueryClientProvider client={queryClient}>
@@ -189,6 +249,7 @@ export function App() {
                 </Routes>
               </ErrorBoundary>
             </main>
+            <BottomNav />
           </div>
         </div>
       </BrowserRouter>

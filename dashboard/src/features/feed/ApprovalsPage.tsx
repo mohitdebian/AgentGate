@@ -338,7 +338,6 @@ export function ApprovalsPage() {
       <div className="bar">
         <input
           className="inp"
-          style={{ flex: 1 }}
           placeholder="Add a note (optional)"
           value={note}
           onChange={e => setNote(e.target.value)}

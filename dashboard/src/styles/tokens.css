@@ -352,10 +352,12 @@ button:focus-visible, input:focus-visible, a:focus-visible {
   align-items: center;
   gap: 10px;
   margin-bottom: 12px;
+  flex-wrap: wrap;
 }
 .sx {
   position: relative;
   width: 340px;
+  max-width: 100%;
 }
 .sx svg {
   position: absolute;
@@ -443,7 +445,8 @@ button:focus-visible, input:focus-visible, a:focus-visible {
   border: 1px solid var(--ln);
   border-radius: 8px;
   background: var(--pn);
-  overflow: hidden;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
 }
 .tr {
   display: grid;
@@ -711,6 +714,7 @@ button:focus-visible, input:focus-visible, a:focus-visible {
   justify-content: center;
 }
 .bar > * { max-width: 760px; }
+.bar > input { flex: 1; }
 
 .edb {
   border: 1px solid var(--ln);
@@ -794,4 +798,98 @@ button:focus-visible, input:focus-visible, a:focus-visible {
   }
   .k:nth-child(2) { border-right: 0; }
   .k:nth-child(-n+2) { border-bottom: 1px solid var(--ln); }
+  .mh, .rg { grid-template-columns: 1fr; }
+}
+
+@media (max-width: 768px) {
+  .tr {
+    min-width: 600px;
+  }
+  .sx {
+    width: 100%;
+    flex: 1 1 100%;
+  }
+  .dt {
+    margin: 0 0 14px;
+  }
+}
+
+@media (max-width: 640px) {
+  .pgc {
+    padding: 14px 12px 32px;
+  }
+  .hd {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 8px;
+  }
+  .hg {
+    grid-template-columns: 1fr;
+  }
+  .bar {
+    padding: 10px 12px;
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+  .bar > .inp,
+  .bar > input {
+    width: 100%;
+    max-width: 100%;
+    flex: 1 1 100%;
+  }
+  .bar > .btn,
+  .bar > button {
+    flex: 1;
+    justify-content: center;
+    height: 32px;
+  }
+  .ft2 {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 8px;
+  }
+  .ft2 .btn {
+    justify-content: center;
+    width: 100%;
+  }
+  .ft2 .mt {
+    margin-left: 0;
+    text-align: center;
+  }
+  .ct {
+    flex-wrap: wrap;
+    gap: 6px;
+  }
+  .ct .sp {
+    display: none;
+  }
+}
+
+@media (max-width: 480px) {
+  .kp {
+    grid-template-columns: 1fr;
+  }
+  .k {
+    border-right: 0 !important;
+    border-bottom: 1px solid var(--ln);
+  }
+  .k:last-child {
+    border-bottom: 0;
+  }
+  .k .l {
+    flex-wrap: wrap;
+    gap: 4px;
+  }
+  .k .n {
+    font-size: 20px;
+  }
+  .seg {
+    width: 100%;
+    overflow-x: auto;
+  }
+  .seg button {
+    flex: 1;
+    justify-content: center;
+    padding: 0 6px;
+  }
 }

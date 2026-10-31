@@ -326,7 +326,7 @@ export function FeedPage() {
           />
         </div>
 
-        <span className="flex-1" />
+        <span className="flex-1 hidden sm:block" />
 
         <button 
           className={`sw ${groupRepeats ? 'on' : ''}`}

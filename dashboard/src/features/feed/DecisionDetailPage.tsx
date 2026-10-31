@@ -317,7 +317,7 @@ export function DecisionDetailPage() {
         </div>
 
         {/* Footer controls */}
-        <div className="flex items-center gap-[8px] pt-[8px]">
+        <div className="ft2 pt-[8px]">
           {d.v === 'ask' && (
             <Link to="/approvals" className="btn pri">
               Review in queue
@@ -326,7 +326,7 @@ export function DecisionDetailPage() {
           <Link to="/policy" className="btn">
             Replay under draft policy
           </Link>
-          <span className="ml-auto text-t3 mo text-[11.5px]">
+          <span className="mt mo">
             policy v1 · agentgate-v0
           </span>
         </div>
